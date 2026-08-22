@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LearnLoop — an adaptive, personal AI tutor that understands how every child learns." />
+  <title>LearnLoop — Your Personal AI Tutor</title>
+  <style>
+    :root{
+      --navy:#0c1d45;
+      --blue:#3f67ff;
+      --purple:#8d43e8;
+      --orange:#ff7b20;
+      --green:#2eb875;
+      --text:#162344;
+      --muted:#5e6880;
+      --line:#e8ebf4;
+      --soft:#f7f8ff;
+      --pink:#fff0f4;
+      --mint:#f0faef;
+      --shadow:0 18px 50px rgba(26,42,92,.10);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:#fff;
+      line-height:1.5;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(1180px, calc(100% - 40px));margin:auto}
+    .nav{
+      height:82px;display:flex;align-items:center;justify-content:space-between;
+      gap:24px;background:#fff;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-mark{
+      width:64px;height:64px;border:2px solid var(--blue);border-radius:18px;
+      display:grid;place-items:center;background:linear-gradient(135deg,#eef3ff,#fff);
+      font-size:31px;
+    }
+    .brand-text{font-size:33px;font-weight:800;letter-spacing:-1.7px}
+    .brand-text span:nth-child(1){color:#15264d}
+    .brand-text span:nth-child(2){color:#3e65ff}
+    .brand-text span:nth-child(3){color:#9445e8}
+    .brand-text span:nth-child(4){color:#ff771f}
+    .tagline{display:block;font-size:14px;letter-spacing:.1px;color:#26345c;margin-top:-4px}
+    .navlinks{display:flex;gap:30px;align-items:center;font-size:14px;font-weight:600}
+    .navlinks a:hover{color:var(--blue)}
+    .btn{
+      border:0;border-radius:13px;padding:13px 22px;font-weight:750;cursor:pointer;
+      transition:.2s transform,.2s box-shadow,.2s opacity;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(63,103,255,.20)}
+    .btn-primary{color:#fff;background:linear-gradient(100deg,#3f67ff,#9742e7)}
+    .btn-outline{background:#fff;color:#355cff;border:1px solid #6f84ff}
+    .hero{
+      min-height:560px;display:grid;grid-template-columns:42% 58%;align-items:center;
+      overflow:hidden;
+    }
+    .eyebrow{
+      display:inline-block;background:#f1efff;color:#5262cf;border-radius:30px;
+      padding:7px 15px;font-size:13px;font-weight:700;margin-bottom:13px;
+    }
+    h1{
+      font-size:48px;line-height:1.06;letter-spacing:-2px;margin:0 0 15px;
+      max-width:560px;
+    }
+    .gradient-text{background:linear-gradient(90deg,#3e65ff,#8f45e6,#ef6930);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero-copy{font-size:16px;color:var(--muted);max-width:530px}
+    .hero-actions{display:flex;gap:14px;margin:25px 0}
+    .benefits{display:flex;gap:25px;flex-wrap:wrap;margin-top:25px}
+    .benefit{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700}
+    .icon{
+      width:27px;height:27px;border-radius:50%;display:grid;place-items:center;
+      background:#f0f4ff;color:var(--blue);font-size:14px;
+    }
+    .hero-visual{position:relative;height:560px;display:flex;align-items:center;justify-content:center}
+    .hero-photo{
+      width:86%;height:88%;object-fit:cover;border-radius:34px 0 0 34px;
+      object-position:center;box-shadow:var(--shadow);
+    }
+    .floating{
+      position:absolute;background:#fff;border-radius:16px;padding:14px 16px;
+      box-shadow:0 12px 35px rgba(26,42,92,.13);font-size:12px;z-index:2;
+    }
+    .goal{left:0;top:105px;width:132px}
+    .feedback{right:0;top:160px;width:150px}
+    .streak{right:0;bottom:110px;width:105px}
+    .bar{height:6px;border-radius:99px;background:#edf0f5;margin-top:8px;overflow:hidden}
+    .bar i{display:block;width:72%;height:100%;background:#42b978;border-radius:99px}
+    .section{padding:35px 0 10px}
+    .adapt-box{background:linear-gradient(110deg,#faf9ff,#f5f8ff);border-radius:28px;padding:18px}
+    .section-title{text-align:center;margin:0;font-size:23px;letter-spacing:-.5px}
+    .section-sub{text-align:center;color:var(--muted);margin:4px 0 20px}
+    .two-students{display:grid;grid-template-columns:1fr 1fr;gap:64px;position:relative}
+    .student-card{padding:22px;border-radius:20px;display:grid;grid-template-columns:145px 1fr;gap:20px;align-items:center}
+    .student-card.aria{background:var(--pink)}
+    .student-card.mira{background:var(--mint)}
+    .student-photo{width:145px;height:205px;border-radius:16px;object-fit:cover}
+    .student-card h3{margin:0 0 2px;font-size:18px}
+    .aria h3{color:#e83567}.mira h3{color:#14906d}
+    .student-card p{margin:0 0 11px;font-size:12px;font-weight:700}
+    .student-card ul{list-style:none;padding:0;margin:0;display:grid;gap:8px;font-size:12px}
+    .student-card li{display:flex;gap:7px;align-items:flex-start}
+    .check{width:14px;height:14px;flex:0 0 14px;border-radius:50%;color:#fff;display:grid;place-items:center;font-size:9px;margin-top:2px}
+    .aria .check{background:#ef4d72}.mira .check{background:#36b675}
+    .student-note{background:#fff;border-radius:14px;padding:11px 12px;margin-top:12px;font-size:12px;box-shadow:0 5px 18px rgba(40,50,80,.06)}
+    .path-pill{
+      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+      width:85px;height:85px;border-radius:50%;background:#fff;box-shadow:0 8px 22px rgba(30,40,80,.10);
+      display:grid;place-items:center;text-align:center;font-size:10px;font-weight:800;color:#4b5dd1;z-index:2
+    }
+    .features{padding-top:35px}
+    .feature-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-top:14px}
+    .feature{
+      border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;
+      box-shadow:0 3px 12px rgba(30,50,90,.03)
+    }
+    .feature img{height:125px;width:100%;object-fit:cover}
+    .feature-body{padding:12px}
+    .feature h4{margin:0 0 7px;font-size:14px}
+    .feature p{margin:0;color:var(--muted);font-size:11px}
+    .workflow{
+      margin-top:24px;background:#f8f9ff;border-radius:24px;padding:30px;
+      display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;
+    }
+    .steps{display:grid;gap:15px;margin-top:18px}
+    .step{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start}
+    .step-num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;background:linear-gradient(135deg,#4771ff,#9650e8)}
+    .step h4{margin:0;font-size:14px}.step p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .workflow-visual{min-height:350px;position:relative;display:grid;place-items:center}
+    .learner{
+      width:270px;height:270px;border-radius:50%;background:#e7e5ff;
+      display:grid;place-items:center;font-size:110px;box-shadow:inset 0 0 0 24px rgba(255,255,255,.4)
+    }
+    .right-panel{background:#f0edff;border-radius:20px;padding:25px}
+    .right-panel h3{margin-top:0}
+    .right-panel ul{padding-left:20px;font-size:13px;display:grid;gap:9px}
+    .mini-dashboard{background:#fff;border-radius:15px;padding:15px;margin-top:16px;box-shadow:0 7px 22px rgba(30,30,80,.08)}
+    .mini-dashboard .row{display:flex;justify-content:space-between;font-size:11px;margin:7px 0}
+    .progress{height:7px;background:#edf0f5;border-radius:99px;overflow:hidden}
+    .progress span{display:block;height:100%;width:78%;background:linear-gradient(90deg,#3f67ff,#8e46e8)}
+    .bonus{padding:35px 0}
+    .bonus-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .bonus-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}
+    .bonus-card .big{font-size:26px}.bonus-card h4{margin:7px 0 4px}.bonus-card p{margin:0;color:var(--muted);font-size:12px}
+    .cta{
+      margin-top:12px;border-radius:0;padding:30px 40px;
+      background:linear-gradient(100deg,#3f72ff 0%,#8b45e6 42%,#ff6d31 100%);
+      color:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:30px;
+    }
+    .cta h2{margin:0;text-align:center;font-size:20px;line-height:1.3}
+    .cta p{margin:4px 0 0;text-align:center;font-size:13px}
+    .cta .btn{background:#fff;color:#724be4}
+    .checks{font-size:12px;display:grid;gap:8px}.checks span:before{content:"✓";font-weight:900;margin-right:8px}
+    footer{padding:28px 0;color:#6a7287;font-size:12px;display:flex;justify-content:space-between}
+    @media(max-width:950px){
+      .navlinks{display:none}.hero{grid-template-columns:1fr}.hero-copy{max-width:700px}.hero-visual{height:430px}
+      .feature-grid{grid-template-columns:repeat(3,1fr)}.two-students{gap:20px}.path-pill{display:none}
+      .workflow{grid-template-columns:1fr}.bonus-grid{grid-template-columns:repeat(2,1fr)}
+      .cta{grid-template-columns:1fr}
+    }
+    @media(max-width:650px){
+      .container{width:min(100% - 24px,1180px)}.brand-text{font-size:25px}.brand-mark{width:50px;height:50px}
+      h1{font-size:39px}.hero-actions{flex-direction:column;align-items:stretch}.hero-visual{height:390px}
+      .hero-photo{width:100%;border-radius:25px}.goal{left:5px}.feedback{right:5px}.streak{right:5px}
+      .two-students{grid-template-columns:1fr}.student-card{grid-template-columns:110px 1fr}.student-photo{width:110px;height:160px}
+      .feature-grid{grid-template-columns:1fr 1fr}.bonus-grid{grid-template-columns:1fr}.cta{padding:28px 18px}
+      footer{flex-direction:column;gap:10px}.benefits{gap:14px}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="#">
+      <div class="brand-mark">🤖</div>
+      <div>
+        <div class="brand-text"><span>L</span><span>earn</span><span>L</span><span>oop</span></div>
+        <span class="tagline">Your Personal AI Tutor</span>
+      </div>
+    </a>
+    <nav class="navlinks">
+      <a href="#how">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#families">For Parents & Teachers</a>
+      <a href="#safety">Safe Learning</a>
+      <a href="#start" class="btn btn-primary">Get Started</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="container hero" id="start">
+    <div>
+      <span class="eyebrow">Adaptive. Personal. Always with you.</span>
+      <h1>One Student.<br><span class="gradient-text">Endless Potential.</span></h1>
+      <p class="hero-copy">LearnLoop is an AI tutor that gently discovers what your child understands, adapts every lesson in real time, and explains ideas in a way that makes sense to them.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="startLearning()">Start Learning Free</button>
+        <button class="btn btn-outline" onclick="watchDemo()">▶ &nbsp;Watch Demo</button>
+      </div>
+      <div class="benefits">
+        <div class="benefit"><span class="icon">♙</span>Personalised<br>Learning</div>
+        <div class="benefit"><span class="icon">💡</span>Understanding<br>over Rote</div>
+        <div class="benefit"><span class="icon">◎</span>Multi-language<br>Support</div>
+        <div class="benefit"><span class="icon">♡</span>Safe &<br>Encouraging</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating goal"><b>Today's Goal</b><br>Solve fractions<br>with confidence<div class="bar"><i></i></div><small>3 / 5</small></div>
+      <img class="hero-photo" src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=1100&q=85" alt="Child learning with a tablet" />
+      <div class="floating feedback"><b>Keep it up!</b> 🎉<br>You're building great understanding.<br><span style="font-size:23px">🤖</span></div>
+      <div class="floating streak">🔥 <b>12 days</b><br><small>Learning streak</small></div>
+    </div>
+  </section>
+
+  <section class="container section" id="adapt">
+    <div class="adapt-box">
+      <h2 class="section-title">Two Students. Two Different Experiences.</h2>
+      <p class="section-sub">LearnLoop changes the path — not just the difficulty — based on how each child learns.</p>
+      <div class="two-students">
+        <article class="student-card aria">
+          <img class="student-photo" src="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=500&q=85" alt="Student working through a lesson" />
+          <div>
+            <h3>Meet Aria 📈</h3>
+            <p>Needs more support</p>
+            <ul>
+              <li><span class="check">✓</span>Starts with easier questions</li>
+              <li><span class="check">✓</span>Gets extra explanations & examples</li>
+              <li><span class="check">✓</span>Builds confidence step by step</li>
+              <li><span class="check">✓</span>Encouragement at every step</li>
+            </ul>
+            <div class="student-note">Aria gets patient guidance and the right support to strengthen her basics.</div>
+          </div>
+        </article>
+        <div class="path-pill">← →<br><b>Same Topic</b><br>Different Path</div>
+        <article class="student-card mira">
+          <img class="student-photo" src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=500&q=85" alt="Confident student learning independently" />
+          <div>
+            <h3>Meet Mira 🚀</h3>
+            <p>Understanding quickly</p>
+            <ul>
+              <li><span class="check">✓</span>Moves to advanced questions</li>
+              <li><span class="check">✓</span>Deeper concepts & challenges</li>
+              <li><span class="check">✓</span>Keeps her engaged and curious</li>
+              <li><span class="check">✓</span>Stays motivated to learn more</li>
+            </ul>
+            <div class="student-note">Mira gets the right challenge to keep her learning exciting and growing.</div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section features" id="features">
+    <h2 class="section-title">Built for the way children learn best</h2>
+    <div class="feature-grid">
+      <article class="feature">
+        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=85" alt="Child discovering their learning level" />
+        <div class="feature-body"><h4>Finds Their Real Level</h4><p>Gentle questions reveal what a child knows and what they're ready to learn next — without the pressure of a formal test.</p></div>
+      </article>
+      <article class="feature">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=85" alt="Adaptive learning dashboard" />
+        <div class="feature-body"><h4>Adapts in Real Time</h4><p>Every answer shapes the next question and explanation, like a personal tutor beside them.</p></div>
+      </article>
+      <article class="feature">
+        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=85" alt="Child thinking about a concept" />
+        <div class="feature-body"><h4>Understands, Not Just Memorises</h4><p>When an answer is correct, LearnLoop can ask “Why?” or “How do you know?” to check genuine understanding.</p></div>
+      </article>
+      <article class="feature">
+        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=85" alt="Child learning with regional language support" />
+        <div class="feature-body"><h4>Learns in Their Language</h4><p>Explanations can be given in English, Hindi, Telugu and more — helping children learn comfortably.</p></div>
+      </article>
+      <article class="feature">
+        <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=600&q=85" alt="Happy child celebrating progress" />
+        <div class="feature-body"><h4>Encourages Every Step</h4><p>Celebrates effort and progress so children feel confident enough to keep going.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="container workflow" id="how">
+    <div>
+      <h2 style="margin:0;font-size:23px">How LearnLoop Works</h2>
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div><h4>Understands You</h4><p>Starts with a relaxed conversation and a few low-pressure questions to find the learner's current level.</p></div></div>
+        <div class="step"><span class="step-num">2</span><div><h4>Creates Your Path</h4><p>Builds a personalised learning path from what the child already knows.</p></div></div>
+        <div class="step"><span class="step-num">3</span><div><h4>Teaches & Adapts</h4><p>Explains, asks, listens and adjusts the next step in real time.</p></div></div>
+        <div class="step"><span class="step-num">4</span><div><h4>Checks Understanding</h4><p>Uses “explain why” follow-ups so a lucky guess or memorised answer doesn't look like mastery.</p></div></div>
+      </div>
+    </div>
+    <div class="workflow-visual">
+      <div class="learner">👦🏻<br><span style="font-size:28px">🎧</span></div>
+    </div>
+  </section>
+
+  <section class="container section" id="families">
+    <div class="right-panel">
+      <h2 style="margin:0;font-size:23px">More Than Just an App</h2>
+      <ul>
+        <li>Stays with your child from KG to Class 12.</li>
+        <li>Focuses on understanding, not cramming.</li>
+        <li>Supports regional-language learners.</li>
+        <li>Progress is explained simply for parents and teachers.</li>
+      </ul>
+      <div class="mini-dashboard">
+        <b>Parent / Teacher Snapshot</b>
+        <div class="row"><span>Fractions</span><b>Strong</b></div>
+        <div class="progress"><span style="width:88%"></span></div>
+        <div class="row"><span>Word Problems</span><b>Growing</b></div>
+        <div class="progress"><span style="width:62%"></span></div>
+        <div class="row"><span>Explain “why”</span><b>Needs practice</b></div>
+        <div class="progress"><span style="width:46%"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container bonus" id="safety">
+    <h2 class="section-title">Learning that feels safe, human and encouraging</h2>
+    <p class="section-sub">Helpful extras that support the whole learning journey.</p>
+    <div class="bonus-grid">
+      <article class="bonus-card"><div class="big">📊</div><h4>Progress View</h4><p>Parents and teachers can see strengths, areas to practise and recent progress at a glance.</p></article>
+      <article class="bonus-card"><div class="big">🫶</div><h4>Trusted Adult Support</h4><p>If a child types something worrying, LearnLoop gently encourages them to talk to a trusted adult instead of trying to handle it alone.</p></article>
+      <article class="bonus-card"><div class="big">🎙️</div><h4>Voice Learning</h4><p>Younger children can use voice input and hear explanations aloud, reducing dependence on reading.</p></article>
+      <article class="bonus-card"><div class="big">🔥</div><h4>Gentle Streaks</h4><p>Small celebrations and streaks make returning to learning feel rewarding, not stressful.</p></article>
+    </div>
+  </section>
+
+  <section class="cta" aria-label="Get started">
+    <div style="font-size:54px">🎓📚</div>
+    <div>
+      <h2>Every child deserves a tutor who understands them.<br>Let's build a better learning journey. Together.</h2>
+      <p><button class="btn" onclick="startLearning()">Get Started for Free →</button></p>
+    </div>
+    <div class="checks">
+      <span>No credit card required</span>
+      <span>Free to start</span>
+      <span>Cancel anytime</span>
+    </div>
+  </section>
+</main>
+
+<footer class="container">
+  <span>© 2026 LearnLoop. Your Personal AI Tutor.</span>
+  <span>Made for curious minds, one step at a time.</span>
+</footer>
+
+<script>
+  function startLearning(){
+    alert("Welcome to LearnLoop! Your first gentle level check would begin here.");
+  }
+  function watchDemo(){
+    alert("Demo placeholder — connect this button to your product demo video.");
+  }
+</script>
+</body>
+</html>
